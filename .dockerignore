@@ -1,0 +1,9 @@
+# kinetis-fpm/Dockerfile and laravel-octane/Dockerfile use the repo root
+# as their build context (they COPY a sibling app directory) — everything
+# below is real, unrelated bulk that context has no reason to include.
+.git
+results
+infra/node_modules
+infra/cdk.out
+**/vendor
+**/.env

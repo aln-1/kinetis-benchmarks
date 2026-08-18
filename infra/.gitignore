@@ -1,0 +1,12 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+cdk.out
+.cdk.staging
+
+# cdk.context.json is deliberately NOT ignored — it pins the exact VPC/
+# subnet IDs resolved by Vpc.fromLookup(), so every future deploy uses
+# the identical values instead of re-resolving (and potentially
+# drifting) each time. Committing it is what makes "the same stack in
+# the future" actually true.

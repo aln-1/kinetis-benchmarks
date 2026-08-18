@@ -1,0 +1,25 @@
+{
+    "name": "kinetis-benchmarks/yii2",
+    "description": "Minimal Yii2 benchmark application",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "yiisoft/yii2": "~2.0.51"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\controllers\\": "controllers/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    }
+}

@@ -1,0 +1,227 @@
+x-db-env: &db_env
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_NAME: tfbench
+  DB_USER: tfbench
+  DB_PASSWORD: tfbench
+  DB_PORT: "3306"
+
+x-app-sysctls: &app_sysctls
+  net.ipv4.ip_local_port_range: "1024 65535"
+  net.ipv4.tcp_tw_reuse: "1"
+
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: tfbench
+      MYSQL_USER: tfbench
+      MYSQL_PASSWORD: tfbench
+      MYSQL_ROOT_PASSWORD: root
+    command: ["--max-connections=1000", "--max-connect-errors=1000000"]
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    image: mysql:8.4
+    volumes:
+      - ./schema/seed.sql:/seed.sql:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+    entrypoint: ["sh", "-c"]
+    command: ["mysql --default-character-set=utf8mb4 -h mysql -u root -proot tfbench < /seed.sql"]
+
+  kinetis:
+    build:
+      context: kinetis
+      dockerfile: docker/Dockerfile
+    environment:
+      <<: *db_env
+      APP_ENV: production
+      KINETIS_WORKER_THREADS: "2"
+    sysctls: *app_sysctls
+    ports:
+      - "8081:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  kinetis-fpm:
+    build:
+      context: .
+      dockerfile: kinetis-fpm/Dockerfile
+    environment:
+      <<: *db_env
+      APP_ENV: production
+    sysctls: *app_sysctls
+    ports:
+      - "8088:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  laravel-octane:
+    build:
+      context: .
+      dockerfile: laravel-octane/Dockerfile
+    environment:
+      <<: *db_env
+      APP_ENV: production
+    sysctls: *app_sysctls
+    ports:
+      - "8089:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  laravel:
+    build:
+      context: laravel
+    environment: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8082:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  symfony:
+    build:
+      context: symfony
+    environment: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8083:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  codeigniter:
+    build:
+      context: codeigniter
+    environment: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8084:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  yii2:
+    build:
+      context: yii2
+    environment: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8085:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  cakephp:
+    build:
+      context: cakephp
+    environment: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8086:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  slim:
+    build:
+      context: slim
+    environment: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8087:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  # The same Slim application as the target above, served by FrankenPHP
+  # in worker mode instead of nginx + PHP-FPM. Identical source, lock
+  # file, worker count, and resource limits, so the pair isolates the
+  # runtime rather than the framework.
+  slim-frankenphp:
+    build:
+      context: slim-frankenphp
+    environment:
+      <<: *db_env
+      SLIM_WORKER_THREADS: "2"
+    sysctls: *app_sysctls
+    ports:
+      - "8090:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  wrk:
+    build:
+      context: docker/wrk
+    profiles: ["benchmark"]
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+volumes:
+  mysql_data:

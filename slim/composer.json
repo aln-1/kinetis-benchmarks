@@ -1,0 +1,19 @@
+{
+    "name": "kinetis-benchmarks/slim",
+    "description": "Minimal Slim 4 entry for the Kinetis framework benchmark comparison",
+    "type": "project",
+    "require": {
+        "php": "^8.4",
+        "slim/slim": "^4.14",
+        "slim/psr7": "^1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

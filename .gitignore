@@ -1,0 +1,23 @@
+# OS / editor cruft
+.DS_Store
+
+# Real environment files — contain generated secrets (Laravel's
+# APP_KEY, Symfony's APP_SECRET) or real DB credentials, even for a
+# local benchmark deployment. Commit *.env.example templates instead.
+.env
+.env.*
+!.env.example
+!*.env.example
+
+# Composer dependencies — regenerated via `composer install`, never
+# tracked. Each framework directory also carries its own official
+# .gitignore with framework-specific extras (caches, logs, storage/,
+# var/, ...); this is the one rule every one of them needs in common.
+vendor/
+
+composer.phar
+
+# Output from ./run.sh — regenerated per sweep, not source.
+/results/
+.buildpath
+.project
