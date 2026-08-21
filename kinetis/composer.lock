@@ -70,38 +70,38 @@
         },
         {
             "name": "kinetis/framework",
-            "version": "v1.17.1",
+            "version": "v1.35.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kinetis-dev/framework.git",
-                "reference": "d9294c562de9ca3e630c24d3b22b33fbcf9b947f"
+                "reference": "8d5f1e7557c10adec329e9b78fdeb2f42ca4d0fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kinetis-dev/framework/zipball/d9294c562de9ca3e630c24d3b22b33fbcf9b947f",
-                "reference": "d9294c562de9ca3e630c24d3b22b33fbcf9b947f",
+                "url": "https://api.github.com/repos/kinetis-dev/framework/zipball/8d5f1e7557c10adec329e9b78fdeb2f42ca4d0fa",
+                "reference": "8d5f1e7557c10adec329e9b78fdeb2f42ca4d0fa",
                 "shasum": ""
             },
             "require": {
                 "ext-fileinfo": "*",
-                "nyholm/psr7": "^1.8",
-                "nyholm/psr7-server": "^1.1",
+                "nyholm/psr7": "^1.8.2",
+                "nyholm/psr7-server": "^1.1.0",
                 "php": "^8.4",
-                "psr/container": "^2.0",
-                "psr/event-dispatcher": "^1.0",
+                "psr/container": "^2.0.2",
+                "psr/event-dispatcher": "^1.0.0",
                 "psr/http-message": "^2.0",
-                "psr/http-server-middleware": "^1.0",
-                "psr/log": "^3.0",
-                "psr/simple-cache": "^3.0",
-                "revolt/event-loop": "^1.0",
-                "vlucas/phpdotenv": "^5.6"
+                "psr/http-server-middleware": "^1.0.2",
+                "psr/log": "^3.0.2",
+                "psr/simple-cache": "^3.0.0",
+                "revolt/event-loop": "^1.0.9",
+                "vlucas/phpdotenv": "^5.6.4"
             },
             "require-dev": {
-                "infection/infection": "^0.34.2",
-                "nikic/php-parser": "^5.0",
-                "phpstan/phpstan": "^2.2",
-                "phpunit/phpunit": "^11.0",
-                "vimeo/psalm": "^6.16"
+                "infection/infection": "^0.35.0",
+                "nikic/php-parser": "^5.8.0",
+                "phpstan/phpstan": "^2.2.8",
+                "phpunit/phpunit": "^12.5.33",
+                "vimeo/psalm": "^6.16.1"
             },
             "suggest": {
                 "ext-event": "An OS-native Revolt event-loop backend (epoll), removing select()'s 1024 fd-number ceiling. Needed when the loop watches real sockets (native Postgres driver, Redis, HTTP client) in a FrankenPHP worker process; a MySQL-only deployment does not need it. ext-uv/ext-ev work equally."
@@ -133,35 +133,36 @@
             "description": "The Runtime-Aware PHP Framework",
             "support": {
                 "issues": "https://github.com/kinetis-dev/framework/issues",
-                "source": "https://github.com/kinetis-dev/framework/tree/v1.17.1"
+                "source": "https://github.com/kinetis-dev/framework/tree/v1.35.1"
             },
-            "time": "2026-08-17T22:49:07+00:00"
+            "time": "2026-08-21T21:51:28+00:00"
         },
         {
             "name": "kinetis/persistence",
-            "version": "v1.10.1",
+            "version": "v1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kinetis-dev/persistence.git",
-                "reference": "224c68141358e752a1e3b172925a434e12e9a076"
+                "reference": "4585d72965bfc68a1b73893d019eccf3ea0f6a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kinetis-dev/persistence/zipball/224c68141358e752a1e3b172925a434e12e9a076",
-                "reference": "224c68141358e752a1e3b172925a434e12e9a076",
+                "url": "https://api.github.com/repos/kinetis-dev/persistence/zipball/4585d72965bfc68a1b73893d019eccf3ea0f6a71",
+                "reference": "4585d72965bfc68a1b73893d019eccf3ea0f6a71",
                 "shasum": ""
             },
             "require": {
-                "kinetis/framework": "^1.11",
+                "kinetis/framework": "^1.35.1",
                 "php": "^8.4",
-                "revolt/event-loop": "^1.0"
+                "revolt/event-loop": "^1.0.9"
             },
             "require-dev": {
-                "infection/infection": "^0.34.2",
-                "nyholm/psr7": "^1.8",
-                "phpstan/phpstan": "^2.2",
-                "phpunit/phpunit": "^11.0",
-                "vimeo/psalm": "^6.16"
+                "infection/infection": "^0.35.0",
+                "kinetis/mcp": "^1.1.2",
+                "nyholm/psr7": "^1.8.2",
+                "phpstan/phpstan": "^2.2.8",
+                "phpunit/phpunit": "^12.5.33",
+                "vimeo/psalm": "^6.16.1"
             },
             "suggest": {
                 "ext-mysqli": "Needed by the native MySQL driver (Kinetis\\Persistence\\Driver\\MysqliAsyncClient) — the default under FrankenPHP worker mode via DB_DRIVER=auto.",
@@ -192,9 +193,9 @@
             "description": "Request-scoped SQL transaction safety net, runtime-matched native DB drivers (mysqli async, ext-pgsql async, PDO), and the connection factory for Kinetis — MySQL and Postgres.",
             "support": {
                 "issues": "https://github.com/kinetis-dev/persistence/issues",
-                "source": "https://github.com/kinetis-dev/persistence/tree/v1.10.1"
+                "source": "https://github.com/kinetis-dev/persistence/tree/v1.13.0"
             },
-            "time": "2026-08-17T06:31:20+00:00"
+            "time": "2026-08-21T21:51:37+00:00"
         },
         {
             "name": "kinetis/query-builder",

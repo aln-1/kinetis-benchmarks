@@ -57,6 +57,52 @@ services:
           cpus: "2"
           memory: 2g
 
+  # The same Kinetis application as the target above, served by RoadRunner
+  # (rr serve) instead of FrankenPHP worker mode. public/index.php is
+  # unchanged — Kinetis's RuntimeDetector picks the right adapter on its
+  # own — so only the Dockerfile/composer.json (kinetis/roadrunner-adapter
+  # added) and .rr.yaml differ; src/ and public/ are copied straight from
+  # kinetis/, not duplicated.
+  kinetis-roadrunner:
+    build:
+      context: .
+      dockerfile: kinetis-roadrunner/Dockerfile
+    environment:
+      <<: *db_env
+      APP_ENV: production
+    sysctls: *app_sysctls
+    ports:
+      - "8092:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
+  # RoadRunner's own framework, on RoadRunner — the other reference point
+  # for the kinetis-roadrunner comparison above. Raw SQL via Cycle's DBAL
+  # only, no ORM entities/schema — the same minimal-target style every
+  # other benchmark entry here uses.
+  spiral-roadrunner:
+    build:
+      context: spiral-roadrunner
+    environment:
+      <<: *db_env
+    sysctls: *app_sysctls
+    ports:
+      - "8093:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+
   kinetis-fpm:
     build:
       context: .

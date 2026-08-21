@@ -53,6 +53,8 @@ yii2/
 cakephp/
 slim/
 slim-frankenphp/       Docker/FrankenPHP-worker setup only — reuses slim/'s own source unmodified
+kinetis-roadrunner/    Not part of the 10 above — see "RoadRunner comparison" below
+spiral-roadrunner/     Same — the two live outside the main suite entirely
 infra/                 AWS CDK stack (TypeScript) + deployment/sweep scripts
   lib/kinetis-benchmarks-stack.ts   The 3-instance stack definition
   scripts/                          Every script the AWS path runs — see below
@@ -429,6 +431,46 @@ crosses an AZ or leaves the VPC. Nothing is left running after
 - **No public port on the app instance** — its security group only
   accepts `:8080` from the client instance's own security group, never
   from the internet.
+
+---
+
+## RoadRunner comparison — a separate benchmark, same full sweep
+
+`kinetis-roadrunner` and `spiral-roadrunner` are **not** part of the
+10-target suite above — they exist for a narrower, different question:
+not "how does Kinetis compare to 6 other frameworks," but two focused
+comparisons that both anchor on `kinetis` (FrankenPHP) as the shared
+reference point. Narrower in *which targets* run, not in how thoroughly
+each one does — this gets the exact same full sweep as the main suite,
+just across 3 targets instead of 10.
+
+- **FrankenPHP vs. RoadRunner, same framework.** `kinetis` vs.
+  `kinetis-roadrunner` — the identical Kinetis application from
+  `kinetis/`, unmodified, served by RoadRunner's own `rr serve` instead
+  of FrankenPHP (`RuntimeDetector` picks the right adapter on its own;
+  only the Dockerfile/composer.json/`.rr.yaml` differ). What the
+  runtime itself costs, holding the framework fixed.
+- **Kinetis vs. Spiral, same runtime.** `kinetis-roadrunner` vs.
+  `spiral-roadrunner` — Spiral Framework's own RoadRunner target (raw
+  SQL via Cycle's DBAL only, no ORM entities/schema, the same
+  minimal-target style every framework here uses). What the framework
+  costs, holding RoadRunner fixed — RoadRunner's own equivalent of
+  `kinetis` vs. `slim-frankenphp` in the main suite.
+
+The exact same full sweep described in "Running it locally" above —
+every concurrency level, every query count, nothing scaled down. The
+only difference from the main 10-target run is which targets
+`TARGETS` names:
+
+```sh
+# Bring up just these three targets plus their shared dependencies:
+docker compose up --build -d mysql migrate kinetis kinetis-roadrunner spiral-roadrunner
+
+# Scope run.sh to just these 3 targets — CONCURRENCY_LEVELS and
+# QUERY_COUNTS left unset, so both default to the same full sweep the
+# main 10-target run uses:
+TARGETS="kinetis:8081 kinetis-roadrunner:8092 spiral-roadrunner:8093" ./run.sh
+```
 
 ---
 

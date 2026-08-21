@@ -14,6 +14,8 @@ DEFAULT_TARGETS=(
     "kinetis-fpm:8088"
     "laravel-octane:8089"
     "slim-frankenphp:8090"
+    "kinetis-roadrunner:8092"
+    "spiral-roadrunner:8093"
 )
 
 # Sweep a subset by naming targets, e.g.
@@ -23,7 +25,7 @@ DEFAULT_TARGETS=(
 read -r -a TARGETS <<< "${TARGETS:-${DEFAULT_TARGETS[*]}}"
 
 CONCURRENCY_LEVELS=(${CONCURRENCY_LEVELS:-16 32 64 128 256})
-QUERY_COUNTS=(1 5 10 15 20)
+QUERY_COUNTS=(${QUERY_COUNTS:-1 5 10 15 20})
 QUERY_COUNT_CONCURRENCY=256
 DURATION=15
 WARMUP_DURATION=5

@@ -1,0 +1,14 @@
+version: "3"
+
+server:
+  command: "php /app/public/index.php"
+
+http:
+  address: 0.0.0.0:8080
+  raw_body: true
+  pool:
+    num_workers: 2
+
+logs:
+  mode: production
+  level: warn
